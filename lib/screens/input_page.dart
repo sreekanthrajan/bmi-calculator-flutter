@@ -1,9 +1,13 @@
-import 'package:bmi_calculator/reusable_card.dart';
-import 'package:bmi_calculator/sex_file.dart';
+import 'package:bmi_calculator/calculator.dart';
+import 'package:bmi_calculator/screens/results_page.dart';
+import 'package:bmi_calculator/components/reusable_card.dart';
+import 'package:bmi_calculator/components/round_icon_button.dart';
+import 'package:bmi_calculator/components/sex_file.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'constants.dart';
+import '../components/bottom_button.dart';
+import '../constants.dart';
 
 enum Gender { male, female }
 
@@ -201,35 +205,24 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            color: kBottomContainerColor,
-            margin: EdgeInsets.only(top: 10.0),
-            height: kBottomContainerHeight,
-            width: double.infinity,
+          BottomButton(
+            buttonTitle: 'Calculate',
+            onTap: () {
+              CalculatorBrain calc =
+                  CalculatorBrain(weight: weight, height: height);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultsPage(
+                      bmiResult: calc.caculateBmi(),
+                      resultText: calc.getResult(),
+                      interpretation: calc.getInterpretation()),
+                ),
+              );
+            },
           ),
         ],
       ),
-    );
-  }
-}
-
-class RoundIconButton extends StatelessWidget {
-  RoundIconButton({this.icon, this.function});
-
-  final IconData icon;
-  final Function function;
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: function,
-      elevation: 0.0,
-      child: Icon(icon),
-      constraints: BoxConstraints.tightFor(
-        width: 56.0,
-        height: 58.0,
-      ),
-      shape: CircleBorder(),
-      fillColor: Color(0xFF4C4F5E),
     );
   }
 }
